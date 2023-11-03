@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fed0c7d81de2944429b390bf91d741f5
+guid: e5b0a7cd098524c408638eedcadc3ca7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -136,22 +136,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dead (1)_0
+      name: Attack_2_0
       rect:
         serializedVersion: 2
-        x: 249
-        y: 63
-        width: 283
-        height: 464
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 32
+        y: 0
+        width: 53
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2f3a82e5af178f84bb92a8774950b770
-      internalID: 653583323
+      spriteID: 58979f2a7109658439d5104133739d06
+      internalID: 868117978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_2_1
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 0
+        width: 48
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2adefafb04a1332418df8dc132f6b7c0
+      internalID: -1066314572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_2_2
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 0
+        width: 48
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53078d154edb06841af9267440bdd7bc
+      internalID: 1129133364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_2_3
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 0
+        width: 63
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7eeaa505c1ce1046a3e5d3510735ad9
+      internalID: 1337423161
       vertices: []
       indices: 
       edges: []
@@ -167,7 +230,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Dead (1)_0: 653583323
+      Attack_2_0: 868117978
+      Attack_2_1: -1066314572
+      Attack_2_2: 1129133364
+      Attack_2_3: 1337423161
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
