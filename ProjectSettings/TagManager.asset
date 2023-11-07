@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - OB
   layers:
   - Default
   - TransparentFX
@@ -46,4 +47,10 @@ TagManager:
     locked: 0
   - name: ForeGround
     uniqueID: 2460284371
+    locked: 0
+  - name: ThirdGround
+    uniqueID: 1019654159
+    locked: 0
+  - name: Canvas
+    uniqueID: 3892658419
     locked: 0
