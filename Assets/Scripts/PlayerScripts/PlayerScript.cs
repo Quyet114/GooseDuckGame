@@ -1,14 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 public class PlayerScript : MonoBehaviour
 {
+    //-----------------------
     public Animator animator;
     public float moveSpeed = 5f;
     private Rigidbody2D rb;
     public Vector3 moveInput;
-
+    SoundManager soundManager;
+    //---------------------------
+    // coin
+    public static int numberOfCoins;
+    public TextMeshProUGUI coinText;
     // heathBar
     [SerializeField] int maxHeath;
     int curentHeath;
@@ -24,7 +30,11 @@ public class PlayerScript : MonoBehaviour
     {
         onDeath.RemoveListener(death);
     }
-
+    public void Awake()
+    {
+        //soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
+        numberOfCoins = PlayerPrefs.GetInt("NumberOfCoins", 0);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +64,9 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Coin
+        coinText.text = numberOfCoins.ToString();
+
         if (heathBar != null)
         {
             heathBar.UpdateHealth(curentHeath, maxHeath);
