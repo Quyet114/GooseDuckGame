@@ -6,6 +6,9 @@ TagManager:
   tags:
   - OB
   - Wall
+  - Key
+  - Audio
+  - Coin
   layers:
   - Default
   - TransparentFX

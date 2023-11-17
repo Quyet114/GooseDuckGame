@@ -6,6 +6,7 @@ public class Chest : MonoBehaviour
 {
     private bool checkChest = true;
     public Animator animator;
+    public static Chest instance;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +34,7 @@ public class Chest : MonoBehaviour
     }
     IEnumerator FirstFunction()
     {
-        yield return new WaitForSeconds(1); // Chờ 2 giây
+        yield return new WaitForSeconds(1); // Chờ 1 giây
         GetComponent<LootBag>().InstantiateLoot(transform.position);
         checkChest = false;
     }

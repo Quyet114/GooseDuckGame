@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.RuleTile.TilingRuleOutput;
+using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
+
 public class PlayerScript : MonoBehaviour
 {
     //-----------------------
@@ -15,15 +19,20 @@ public class PlayerScript : MonoBehaviour
     // coin
     public static int numberOfCoins;
     public TextMeshProUGUI coinText;
+    public static int numberOfKey;
+    public TextMeshProUGUI KeyText;
     // heathBar
     [SerializeField] int maxHeath;
     int curentHeath;
     public HeathBar heathBar;
     public UnityEvent onDeath;
-
+    //
+    public ParticleSystem bulletParticleSystem;
+    public int maxBullets = 5;
+    private int currentBullets;
 
     public void OnEnable()
-    {
+    {   
         onDeath.AddListener(death);
     }
     public void OnDisable()
@@ -32,16 +41,18 @@ public class PlayerScript : MonoBehaviour
     }
     public void Awake()
     {
-        //soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
+        soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
         numberOfCoins = PlayerPrefs.GetInt("NumberOfCoins", 0);
     }
+
     // Start is called before the first frame update
     void Start()
     {
         curentHeath = maxHeath;
-
+        numberOfKey = 0;
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        currentBullets = maxBullets;
 
     }
 
@@ -50,9 +61,23 @@ public class PlayerScript : MonoBehaviour
     public void takeDame(int Damage)
     {
         curentHeath -= Damage;
-        if(curentHeath <= 0)
+        soundManager.PlayFSX(soundManager.death);
+        if (curentHeath <= 0)
         {   
             onDeath.Invoke();
+        }
+    }
+    // getHeatlh
+    public void takeHeatlh(int Heatlh)
+    {
+        soundManager.PlayFSX(soundManager.getChest);
+        if (curentHeath < maxHeath)
+        {
+            curentHeath += Heatlh;
+        }
+        else
+        {
+            curentHeath = maxHeath;
         }
     }
     // nhân vật chết
@@ -60,12 +85,39 @@ public class PlayerScript : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
+ 
     // Update is called once per frame
     void Update()
+
     {
+        IEnumerator Fire()
+        {
+
+            yield return new WaitForSeconds(3);
+            currentBullets = 5;
+
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+
+            if (currentBullets > 0)
+            {
+                bulletParticleSystem.Play();
+                currentBullets--;
+            }
+            else
+            {
+                StartCoroutine(Fire());
+            }
+
+
+        }
+
         // Coin
         coinText.text = numberOfCoins.ToString();
+        // Key
+        KeyText.text = numberOfKey.ToString();
 
         if (heathBar != null)
         {
@@ -93,10 +145,7 @@ public class PlayerScript : MonoBehaviour
         {
             animator.SetBool("isRunning", false);
         }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            takeDame(2);
-        }
+
 
     }
 
@@ -112,6 +161,22 @@ public class PlayerScript : MonoBehaviour
             // Lấy Rigidbody của OB
             Rigidbody2D obRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
 
+        }
+
+        if (collision.gameObject.CompareTag("Key"))
+        {
+
+            soundManager.PlayFSX(soundManager.getCoint);
+            numberOfKey = 1;
+           // animator.SetBool("getKey", true);
+            Destroy(collision.gameObject);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Coin"))
+        {
+            soundManager.PlayFSX(soundManager.hitwall);
         }
     }
 }

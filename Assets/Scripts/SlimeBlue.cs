@@ -8,7 +8,7 @@ public class SlimeBlue : MonoBehaviour
     PlayerScript player;
     public int minDamage;
     public int maxDamage;
-
+    SoundManager soundManager;
     //di chuyển cho slime ----------------------------------
     public float moveSpeed = 1.0f; // Tốc độ di chuyển
     public float moveRangeX = 1.0f; // Khoảng cách di chuyển theo trục X
@@ -72,7 +72,7 @@ public class SlimeBlue : MonoBehaviour
             InvokeRepeating("DamagePlayer", 0, 1f);
             RandomizeMoveDirection();
             animator.SetBool("Attack", true);
-            GetComponent<LootBag>().InstantiateLoot(transform.position);
+            //GetComponent<LootBag>().InstantiateLoot(transform.position);
         }
         else
         {
