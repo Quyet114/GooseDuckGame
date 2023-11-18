@@ -24,4 +24,13 @@ public class Gold : MonoBehaviour
             Destroy(gameObject, 1f);
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            PlayerScript.numberOfCoins++;
+            PlayerPrefs.SetInt("NumberOfCoins", PlayerScript.numberOfCoins);
+            Destroy(gameObject, 1f);
+        }
+    }
 }

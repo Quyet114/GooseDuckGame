@@ -31,14 +31,14 @@ public class PlayerScript : MonoBehaviour
     public int maxBullets = 5;
     private int currentBullets;
 
-    public void OnEnable()
+/*    public void OnEnable()
     {   
         onDeath.AddListener(death);
     }
     public void OnDisable()
     {
         onDeath.RemoveListener(death);
-    }
+    }*/
     public void Awake()
     {
         soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
@@ -64,7 +64,8 @@ public class PlayerScript : MonoBehaviour
         soundManager.PlayFSX(soundManager.death);
         if (curentHeath <= 0)
         {   
-            onDeath.Invoke();
+            //onDeath.Invoke();
+            StartCoroutine(Death());
         }
     }
     // getHeatlh
@@ -81,38 +82,16 @@ public class PlayerScript : MonoBehaviour
         }
     }
     // nhân vật chết
-    public void death()
+    IEnumerator Death()
     {
+        animator.SetBool("isDeath", true);
+        yield return new WaitForSeconds(2);
         Destroy(gameObject);
+
     }
- 
     // Update is called once per frame
     void Update()
-
     {
-        IEnumerator Fire()
-        {
-
-            yield return new WaitForSeconds(3);
-            currentBullets = 5;
-
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-
-            if (currentBullets > 0)
-            {
-                bulletParticleSystem.Play();
-                currentBullets--;
-            }
-            else
-            {
-                StartCoroutine(Fire());
-            }
-
-
-        }
 
         // Coin
         coinText.text = numberOfCoins.ToString();
@@ -171,6 +150,18 @@ public class PlayerScript : MonoBehaviour
            // animator.SetBool("getKey", true);
             Destroy(collision.gameObject);
         }
+        if (collision.gameObject.CompareTag("Slime"))
+        {
+            animator.SetBool("isHurt", true);
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Slime"))
+        {
+            animator.SetBool("isHurt", false);
+        }
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

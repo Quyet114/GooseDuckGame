@@ -9,6 +9,8 @@ TagManager:
   - Key
   - Audio
   - Coin
+  - door
+  - Slime
   layers:
   - Default
   - TransparentFX

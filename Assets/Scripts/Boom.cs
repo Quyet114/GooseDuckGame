@@ -27,6 +27,15 @@ public class Boom : MonoBehaviour
             Destroy(gameObject, 1f);
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            player = collision.gameObject.GetComponentInParent<PlayerScript>();
+            InvokeRepeating("DamagePlayer", 0, 1f);
+            Destroy(gameObject, 1f);
+        }
+    }
     void DamagePlayer()
     {
         int damage = UnityEngine.Random.Range(minDamage, maxDamage);
