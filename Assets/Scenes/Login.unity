@@ -444,7 +444,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 603103665}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2080035242}
+        m_TargetAssemblyTypeName: LoginUser, Assembly-CSharp
+        m_MethodName: LoadRegister
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &603103665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1636,7 +1648,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1675152207}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2080035242}
+        m_TargetAssemblyTypeName: LoginUser, Assembly-CSharp
+        m_MethodName: CheckLogin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1675152207
 MonoBehaviour:
   m_ObjectHideFlags: 0

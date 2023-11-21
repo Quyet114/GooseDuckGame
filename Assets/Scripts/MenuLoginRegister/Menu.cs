@@ -18,7 +18,8 @@ public class Menu : MonoBehaviour
         // Exit.onClick.AddListener(MovetoGame);
     }
     void MovetoGame(){
-        SceneManager.LoadScene("Quyet");
+       // SceneManager.LoadScene("Quyet");
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
     }
 

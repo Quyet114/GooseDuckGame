@@ -11,6 +11,9 @@ TagManager:
   - Coin
   - door
   - Slime
+  - Light
+  - Speed
+  - Heatlh
   layers:
   - Default
   - TransparentFX

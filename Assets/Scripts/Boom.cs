@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Boom : MonoBehaviour
 {
@@ -16,7 +17,13 @@ public class Boom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        StartCoroutine(Light());
+    }
+    IEnumerator Light()
+    {
+
+        yield return new WaitForSeconds(2);
+        Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

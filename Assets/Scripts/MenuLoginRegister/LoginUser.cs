@@ -45,7 +45,12 @@ public class LoginUser: MonoBehaviour {
         UserModel userModel = new UserModel(user, pass);
         StartCoroutine(Login(userModel));
         Login(userModel);
-
+        Debug.Log(user);
+        
+    }
+    public void LoadRegister()
+    {
+        SceneManager.LoadScene("Register");
     }
     IEnumerator Login(UserModel userModel){
         string jsonStringRequest = JsonConvert.SerializeObject(userModel);

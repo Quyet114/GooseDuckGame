@@ -68,7 +68,7 @@ public class SlimeBlue : MonoBehaviour
     {
         if (collision.gameObject.tag=="Player")
         {
-            GetComponent<LootBag>().InstantiateLoot(transform.position);
+            //GetComponent<LootBag>().InstantiateLoot(transform.position);
             player = collision.gameObject.GetComponentInParent<PlayerScript>();
             InvokeRepeating("DamagePlayer", 0, 1f);
             RandomizeMoveDirection();

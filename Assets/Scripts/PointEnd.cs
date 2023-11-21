@@ -20,7 +20,7 @@ public class PointEnd : MonoBehaviour
         Debug.Log(numKey);
         if (numKey > 0)
         {
-            animator.SetBool("gotKey", true);
+            //animator.SetBool("gotKey", true);
         }
     }
 

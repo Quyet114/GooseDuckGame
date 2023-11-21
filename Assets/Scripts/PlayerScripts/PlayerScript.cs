@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -26,19 +27,23 @@ public class PlayerScript : MonoBehaviour
     int curentHeath;
     public HeathBar heathBar;
     public UnityEvent onDeath;
-    //
-    public ParticleSystem bulletParticleSystem;
-    public int maxBullets = 5;
-    private int currentBullets;
+    // Get Items
+    public GameObject lightObject;
+    public GameObject healthObject;
+    public GameObject speedObject;
+    private bool isActivated = false;
+    // tăng tầm nhìn
+    public Light2D spotlight; // Kéo và thả Spotlight 2D từ Inspector vào trường này
+    public float increasedRadius = 2f; // Giá trị tăng thêm cho radius outer
 
-/*    public void OnEnable()
-    {   
-        onDeath.AddListener(death);
-    }
-    public void OnDisable()
-    {
-        onDeath.RemoveListener(death);
-    }*/
+    /*    public void OnEnable()
+        {   
+            onDeath.AddListener(death);
+        }
+        public void OnDisable()
+        {
+            onDeath.RemoveListener(death);
+        }*/
     public void Awake()
     {
         soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
@@ -52,7 +57,10 @@ public class PlayerScript : MonoBehaviour
         numberOfKey = 0;
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        currentBullets = maxBullets;
+
+        lightObject.SetActive(isActivated);
+        healthObject.SetActive(isActivated);
+        speedObject.SetActive(isActivated);
 
     }
 
@@ -102,6 +110,8 @@ public class PlayerScript : MonoBehaviour
         {
             heathBar.UpdateHealth(curentHeath, maxHeath);
         }
+
+
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
         transform.position += moveInput * moveSpeed * Time.deltaTime;
@@ -146,7 +156,7 @@ public class PlayerScript : MonoBehaviour
         {
 
             soundManager.PlayFSX(soundManager.getCoint);
-            numberOfKey = 1;
+            numberOfKey ++;
            // animator.SetBool("getKey", true);
             Destroy(collision.gameObject);
         }
@@ -169,5 +179,51 @@ public class PlayerScript : MonoBehaviour
         {
             soundManager.PlayFSX(soundManager.hitwall);
         }
+        if (collision.gameObject.CompareTag("Light"))
+        {
+            // Tăng radius outer của spotlight khi va chạm với trigger "Light"
+            StartCoroutine(Light());
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.CompareTag("Speed"))
+        {
+            // Tăng radius outer của spotlight khi va chạm với trigger "Light"
+            StartCoroutine(Speed());
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.CompareTag("Heatlh"))
+        {
+            // Tăng radius outer của spotlight khi va chạm với trigger "Light"
+            curentHeath = maxHeath;
+            Destroy(collision.gameObject);
+            StartCoroutine(Heatlh());
+        }
+
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+
+    }
+    IEnumerator Light()
+    {
+        lightObject.SetActive(true);       
+        spotlight.pointLightOuterRadius += increasedRadius;
+        yield return new WaitForSeconds(10);
+        spotlight.pointLightOuterRadius -= increasedRadius;
+        lightObject.SetActive(false);
+    }
+    IEnumerator Speed()
+    {
+        speedObject.SetActive(true);
+        moveSpeed = 8f;
+        yield return new WaitForSeconds(10);
+        moveSpeed = 5f;
+        speedObject.SetActive(false);
+    }
+    IEnumerator Heatlh()
+    {
+        healthObject.SetActive(true);
+        yield return new WaitForSeconds(3);
+        healthObject.SetActive(false);
     }
 }
