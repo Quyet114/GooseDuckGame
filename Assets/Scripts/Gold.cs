@@ -21,7 +21,7 @@ public class Gold : MonoBehaviour
         if (collision.gameObject.tag == "Player") {
             PlayerScript.numberOfCoins++;
             PlayerPrefs.SetInt("NumberOfCoins", PlayerScript.numberOfCoins);
-            Destroy(gameObject, 1f);
+            Destroy(gameObject);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -30,7 +30,7 @@ public class Gold : MonoBehaviour
         {
             PlayerScript.numberOfCoins++;
             PlayerPrefs.SetInt("NumberOfCoins", PlayerScript.numberOfCoins);
-            Destroy(gameObject, 1f);
+            Destroy(gameObject);
         }
     }
 }

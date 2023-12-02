@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserModel : MonoBehaviour
+public class UserModel 
 {
     public UserModel(string username, string password)
     {

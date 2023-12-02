@@ -5,21 +5,26 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Menu : MonoBehaviour
 {
-    public Button Play;
-    public Button Opion;
-    public Button Exit; 
+    [SerializeField] Animator animator;
+    public TMP_Text txtUser, txtScore;
     void Start()
     {
-        Play.onClick.AddListener(MovetoGame);
-        // Opion.onClick.AddListener(MovetoGame);
-        // Exit.onClick.AddListener(MovetoGame);
+        txtUser.text = LoginScript.loginResponse.username;
+        txtScore.text = LoginScript.loginResponse.score.ToString();
     }
-    void MovetoGame(){
-       // SceneManager.LoadScene("Quyet");
+    public void MovetoGame(){
+        StartCoroutine(LoadLever());
+    }
+    IEnumerator LoadLever()
+    {
+        animator.SetTrigger("End");
+        yield return new WaitForSeconds(1);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        animator.SetTrigger("Start");
     }
-    }
+}
 
