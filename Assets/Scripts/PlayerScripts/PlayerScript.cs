@@ -46,6 +46,8 @@ public class PlayerScript : MonoBehaviour
     // tăng tầm nhìn
     public Light2D spotlight; // Kéo và thả Spotlight 2D từ Inspector vào trường này
     public float increasedRadius = 2f; // Giá trị tăng thêm cho radius outer
+                                       //
+    public GameObject shield,knite;
     //
     private int score;
 
@@ -60,12 +62,15 @@ public class PlayerScript : MonoBehaviour
     public void Awake()
     {
         soundManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<SoundManager>();
+        shield.SetActive(false);
+        knite.SetActive(false);
 
     }
 
     // Start is called before the first frame update
     void Start()
     {
+
         numberOfCoins = 0;
         curentHeath = maxHeath;
         numberOfKey = 0;
@@ -175,6 +180,35 @@ public class PlayerScript : MonoBehaviour
         else
         {
             animator.SetBool("isRunning", false);
+        }
+        if (Input.GetKeyDown(KeyCode.Space) ) // Khi nhấn phím Space (có thể thay đổi)
+        {
+            StartCoroutine(AttackKnite());
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.E)) // Khi nhấn phím Space (có thể thay đổi)
+        {
+            StartCoroutine (AttackShield());
+        }
+
+        IEnumerator AttackKnite()
+        {
+            knite.SetActive(true);
+            animator.SetBool("Knite", true);
+            yield return new WaitForSeconds(1);
+            knite.SetActive(false);
+            animator.SetBool("Knite", false);
+
+        }
+        IEnumerator AttackShield()
+        {
+            shield.SetActive(true);
+            animator.SetBool("Shield", true);
+            yield return new WaitForSeconds(1); 
+            shield.SetActive(false);
+            animator.SetBool("Shield", false);
+
         }
     }
         private void OnCollisionEnter2D(Collision2D collision)

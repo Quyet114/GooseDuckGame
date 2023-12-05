@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
@@ -17,23 +18,36 @@ public class Boss : MonoBehaviour
     private float changeDirectionTimer;
     //di chuyển cho slime +++++++++++++++++++++++++++++++++++
     // Start is called before the first frame update
+    public float maxHealth = 5f;
+    private bool canRun = true;
     void Start()
     {
-        MoveDirection();
+        if(canRun )
+        {
+            MoveDirection();
+        }
+
         //-----------
         animator = GetComponent<Animator>();
     }
     private void Update()
     {
-        // Di chuyển theo hướng hiện tại
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
-
-        // Đếm thời gian và thay đổi hướng sau mỗi khoảng thời gian
-        changeDirectionTimer += Time.deltaTime;
-        if (changeDirectionTimer >= changeDirectionTime)
+        if(canRun)
         {
-            MoveDirection();
-            changeDirectionTimer = 0;
+            // Di chuyển theo hướng hiện tại
+            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+
+            // Đếm thời gian và thay đổi hướng sau mỗi khoảng thời gian
+            changeDirectionTimer += Time.deltaTime;
+            if (changeDirectionTimer >= changeDirectionTime)
+            {
+                MoveDirection();
+                changeDirectionTimer = 0;
+            }
+        }
+        if(maxHealth == 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -64,6 +78,7 @@ public class Boss : MonoBehaviour
             MoveDirection();
             animator.SetBool("hit", true);
         }
+
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -79,5 +94,40 @@ public class Boss : MonoBehaviour
     {
         int damage = UnityEngine.Random.Range(minDamage, maxDamage);
         player.takeDame(damage);
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+/*        if (other.CompareTag("Shield")) // Kiểm tra va chạm với đối tượng có tag "DamageObject"
+        {
+            StartCoroutine(StandStill());
+        }
+        if (other.CompareTag("Knite")) // Kiểm tra va chạm với đối tượng có tag "DamageObject"
+        {
+            StartCoroutine(StandStill());
+            currentHealth -= 2;
+            }*/
+        if (other.gameObject.CompareTag("Shield")) // Kiểm tra va chạm với đối tượng có tag "DamageObject"
+        {
+            StartCoroutine(StandStill2());
+
+        }
+        if (other.gameObject.CompareTag("Knite")) // Kiểm tra va chạm với đối tượng có tag "DamageObject"
+        {
+            StartCoroutine(StandStill());
+        }
+    }
+    IEnumerator StandStill()
+    {
+        maxHealth--;
+        canRun = false;
+        yield return new WaitForSeconds(2);
+        canRun = true;
+
+    }
+    IEnumerator StandStill2() { 
+        canRun = false;
+        yield return new WaitForSeconds(2);
+        canRun = true;
+
     }
 }

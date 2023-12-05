@@ -16,6 +16,8 @@ TagManager:
   - Heatlh
   - Finishpoint
   - checkpoint
+  - Shield
+  - Knite
   layers:
   - Default
   - TransparentFX
