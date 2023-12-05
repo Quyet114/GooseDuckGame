@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
 {
     //-----------------------
     public Animator animator;
-    public float moveSpeed = 5f;
+    public float moveSpeed = 2;
     private Rigidbody2D rb;
     public Vector3 moveInput;
     SoundManager soundManager;
@@ -23,8 +23,9 @@ public class PlayerScript : MonoBehaviour
     // coin
     public static int numberOfCoins, Score;
     public TextMeshProUGUI coinText;
-    public static int numberOfKey;
+    public static int numberOfKey, keyPoint = 50;
     public TextMeshProUGUI KeyText;
+    public TextMeshProUGUI NotifyText;
     public TextMeshProUGUI coinLever;
     // heathBar
     [SerializeField] int maxHeath;
@@ -37,7 +38,11 @@ public class PlayerScript : MonoBehaviour
     public GameObject speedObject;
     private bool isActivated = false;
     private bool canRun = true;
-
+    //End game
+    public GameObject obCrow1, obCrow2, obCrow3;
+    public GameObject canvasEndGame;
+    //Check Point Cavas
+    public GameObject checkP;
     // tăng tầm nhìn
     public Light2D spotlight; // Kéo và thả Spotlight 2D từ Inspector vào trường này
     public float increasedRadius = 2f; // Giá trị tăng thêm cho radius outer
@@ -81,8 +86,8 @@ public class PlayerScript : MonoBehaviour
 
         if (LoginScript.loginResponse.positionX != "")
         {
-            var positionX = float.Parse(LoginScript.loginResponse.positionX);
-            var positionY = float.Parse(LoginScript.loginResponse.positionY);
+            var positionX = float.Parse(LoginScript.loginResponse.positionX) +1;
+            var positionY = float.Parse(LoginScript.loginResponse.positionY) -1;
             var positionZ = float.Parse(LoginScript.loginResponse.positionZ);
             transform.position = new Vector3(positionX, positionY, positionZ);
         }
@@ -100,6 +105,7 @@ public class PlayerScript : MonoBehaviour
         if (curentHeath <= 0)
         {
             //onDeath.Invoke();
+            canRun = false;
             StartCoroutine(Death());
         }
     }
@@ -121,30 +127,36 @@ public class PlayerScript : MonoBehaviour
     {
         animator.SetBool("isDeath", true);
         yield return new WaitForSeconds(2);
+        canvasEndGame.SetActive(true);
+        SaveScore();
+        yield return new WaitForSeconds(1);
         Destroy(gameObject);
 
     }
     // Update is called once per frame
     void Update()
     {
+        //transform.position += moveInput * moveSpeed * Time.deltaTime;
         Score = (score + numberOfCoins);
         coinLever.text = numberOfCoins.ToString();
-        coinText.text = (score + numberOfCoins).ToString();
+        coinText.text =  numberOfCoins.ToString();
         // Key
         KeyText.text = numberOfKey.ToString();
-
+        // thanh máu
         if (heathBar != null)
         {
             heathBar.UpdateHealth(curentHeath, maxHeath);
         }
 
+
+        // di chuyển
         if (canRun)
         {
             moveInput.x = Input.GetAxis("Horizontal");
             moveInput.y = Input.GetAxis("Vertical");
             transform.position += moveInput * moveSpeed * Time.deltaTime;
         }
-
+        // di chuyển
         if (moveInput.x != 0 || moveInput.y != 0)
 
         {
@@ -174,22 +186,31 @@ public class PlayerScript : MonoBehaviour
                 Rigidbody2D obRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
 
             }
+        if (collision.gameObject.CompareTag("checkpoint"))
+        {
+            canRun = false;
 
-            if (collision.gameObject.CompareTag("Key"))
+        }
+        // chạm key
+        if (collision.gameObject.CompareTag("Key"))
             {
 
                 soundManager.PlayFSX(soundManager.getCoint);
                 numberOfKey++;
+                numberOfCoins += keyPoint;
                 // animator.SetBool("getKey", true);
                 Destroy(collision.gameObject);
             }
+            // chạm Slime
             if (collision.gameObject.CompareTag("Slime"))
             {
                 animator.SetBool("isHurt", true);
             }
         }
+        // thoát khỏi collision
         private void OnCollisionExit2D(Collision2D collision)
         {
+            
             if (collision.gameObject.CompareTag("Slime"))
             {
                 animator.SetBool("isHurt", false);
@@ -198,15 +219,44 @@ public class PlayerScript : MonoBehaviour
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            //Chạm coin
             if (collision.CompareTag("Coin"))
             {
                 soundManager.PlayFSX(soundManager.hitwall);
             }
-            if (collision.CompareTag("Finishpoint"))
+            // Chạm điểm EndGame
+            if (collision.CompareTag("Finishpoint") && numberOfKey>=3)
             {
-            StartCoroutine(saveS());
+                StartCoroutine(saveS());
                 soundManager.PlayFSX(soundManager.hitwall);
+            if (numberOfCoins <= 50)
+            {
+                obCrow1.SetActive(true);
+                obCrow2.SetActive(false);
+                obCrow3.SetActive(false);
             }
+            else if (numberOfCoins > 50 && numberOfCoins < 150)
+            {
+                obCrow1.SetActive(true);
+                obCrow2.SetActive(true);
+                obCrow3.SetActive(false);
+            }
+            else if (numberOfCoins >= 150)
+            {
+                obCrow1.SetActive(true);
+                obCrow2.SetActive(true);
+                obCrow3.SetActive(true);
+            }
+            else
+            {
+                obCrow1.SetActive(false);
+                obCrow2.SetActive(false);
+                obCrow3.SetActive(false);
+            }
+
+        }
+
+            //Chạm các vật phẩm
             if (collision.gameObject.CompareTag("Light"))
             {
                 // Tăng radius outer của spotlight khi va chạm với trigger "Light"
@@ -233,12 +283,12 @@ public class PlayerScript : MonoBehaviour
         }
 
         IEnumerator saveS()
-    {
-        SaveScore();
-        yield return new WaitForSeconds(1);
-        canRun = false;
+        {
+            SaveScore();
+            yield return new WaitForSeconds(1);
+            canRun = false;
 
-    }
+        }
         IEnumerator Light()
         {
             lightObject.SetActive(true);
@@ -250,9 +300,9 @@ public class PlayerScript : MonoBehaviour
         IEnumerator Speed()
         {
             speedObject.SetActive(true);
-            moveSpeed = 8f;
+            moveSpeed = 3.5f;
             yield return new WaitForSeconds(10);
-            moveSpeed = 5f;
+            moveSpeed = 2f;
             speedObject.SetActive(false);
         }
         IEnumerator Heatlh()
@@ -261,15 +311,27 @@ public class PlayerScript : MonoBehaviour
             yield return new WaitForSeconds(3);
             healthObject.SetActive(false);
         }
+        IEnumerator Notify()
+        {
+            NotifyText.text = "Successfuly!";
+        yield return new WaitForSeconds(2);
+            NotifyText.text = "Save Your Point!";
+
+    }
+    // Can run
+    public void CanRun()
+        {
+        canRun = true;
+        }
         public void SavePosition()
         {
-            var username = LoginScript.loginResponse.username;
+            var email = LoginScript.loginResponse.email;
             var x = transform.position.x;
             var y = transform.position.y;
             var z = transform.position.z;
-            PositionModel positionModel = new PositionModel(username, x.ToString(), y.ToString(), z.ToString());
+            PositionModel positionModel = new PositionModel(email, x.ToString(), y.ToString(), z.ToString());
             StartCoroutine(SavePositionAPI(positionModel));
-            SavePositionAPI(positionModel);
+            //SavePositionAPI(positionModel);
         }
 
         // api lưu position
@@ -278,7 +340,7 @@ public class PlayerScript : MonoBehaviour
             //…
             string jsonStringRequest = JsonConvert.SerializeObject(positionModel);
 
-            var request = new UnityWebRequest("https://hoccungminh.dinhnt.com/fpt/save-position", "POST");
+            var request = new UnityWebRequest("https://mongo-game-api.onrender.com/v1/user/save-position", "POST");
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -290,6 +352,7 @@ public class PlayerScript : MonoBehaviour
             {
                 Debug.Log(request.error);
                 Debug.Log("Error API");
+                
             }
             else
             {
@@ -298,7 +361,8 @@ public class PlayerScript : MonoBehaviour
 
                 if (responseModel.status == 1)
                 {
-
+                checkP.SetActive(false);
+                StartCoroutine(Notify());
                 }
                 else
                 {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class LoginResponse
 {
     // model trả về của api login
-    public LoginResponse(int status, string notification, string username, string email, int score, string positionX, string positionY, string positionZ)
+    public LoginResponse(int status, string notification, string username, string email, int score, string positionX, string positionY, string positionZ,string profilePicture)
     {
         this.status = status;
         this.notification = notification;
@@ -15,10 +15,11 @@ public class LoginResponse
         this.positionX = positionX;
         this.positionY = positionY;
         this.positionZ = positionZ;
+        this.profilePicture = profilePicture;
     }
 
  
-
+    public string profilePicture { get;set; }
     public int status { get; set; }
     public string notification { get; set; }
     public string username { get; set; }

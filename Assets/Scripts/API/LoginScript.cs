@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,6 +14,7 @@ public class LoginScript : MonoBehaviour
     public TMP_InputField edtUser, edtPass;
     public TMP_Text txtError;
     public static LoginResponse loginResponse;
+    public GameObject canvasLogin;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,7 @@ public class LoginScript : MonoBehaviour
     {
         var user = edtUser.text;
         var pass = edtPass.text;
-
+       
         UserModel userModel = new UserModel(user,pass);
         CheckLogin(userModel);
         StartCoroutine(CheckLogin(userModel));
@@ -45,13 +46,14 @@ public class LoginScript : MonoBehaviour
     {
         animator.SetTrigger("End");
         yield return new WaitForSeconds(1);
+        canvasLogin.SetActive(false);
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
         animator.SetTrigger("Start");
     }
 
     IEnumerator CheckLogin(UserModel userModel)
     {
-        //�
+        //…
         string jsonStringRequest = JsonConvert.SerializeObject(userModel);
 
         /*var request = new UnityWebRequest("https://hoccungminh.dinhnt.com/fpt/login", "POST");*/
@@ -84,11 +86,15 @@ public class LoginScript : MonoBehaviour
                 string positionY = loginResponse.positionY;
                 string positionZ = loginResponse.positionZ;
                 string username = loginResponse.username;
+                string profilePicture = loginResponse.profilePicture;
+
+/*              
                 /*int score = loginResponse.score;*/
                 Bringvalue.username = username;
                 Bringvalue.positionX = positionX;
                 Bringvalue.positionY = positionY;
                 Bringvalue.positionZ = positionZ;
+                Bringvalue.profilePicture = profilePicture;
                 /* Bringvalue.score = score;*/
                 MovetoGame();
                 Debug.Log("status:" + loginResponse.status);
@@ -99,4 +105,6 @@ public class LoginScript : MonoBehaviour
         request.Dispose();
     }
 
+
 }
+    

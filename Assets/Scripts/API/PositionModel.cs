@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PositionModel 
 {
-    public PositionModel(string username, string positionX, string positionY, string positionZ)
+    public PositionModel(string email, string positionX, string positionY, string positionZ)
     {
-        this.username = username;
+        this.email = email;
         this.positionX = positionX;
         this.positionY = positionY;
         this.positionZ = positionZ;
     }
 
-    public string username { get; set; }
+    public string email { get; set; }
     public string positionX { get; set; }
     public string positionY { get; set; }
     public string positionZ { get; set; }

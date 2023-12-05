@@ -42,6 +42,10 @@ public class RegisterScript : MonoBehaviour
                 txtNoti.SetText("email and password is not empty");
 
             }
+            else
+            {
+                txtNoti.SetText("");
+            }
         }
     }
 

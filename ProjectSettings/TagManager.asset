@@ -15,6 +15,7 @@ TagManager:
   - Speed
   - Heatlh
   - Finishpoint
+  - checkpoint
   layers:
   - Default
   - TransparentFX
