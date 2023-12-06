@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     public TextMeshProUGUI KeyText;
     public TextMeshProUGUI NotifyText;
     public TextMeshProUGUI coinLever;
+    public static bool Noti = false;
     // heathBar
     [SerializeField] int maxHeath;
     int curentHeath;
@@ -48,7 +49,11 @@ public class PlayerScript : MonoBehaviour
     public float increasedRadius = 2f; // Giá trị tăng thêm cho radius outer
                                        //
     public GameObject shield,knite;
-    //
+    // Thực hiện đánh
+    private bool canPressSpace = true;
+    public float cooldownTime = 1f;
+    private float cooldownTimer;
+    //--------------------
     private int score;
 
     /*    public void OnEnable()
@@ -113,6 +118,10 @@ public class PlayerScript : MonoBehaviour
             canRun = false;
             StartCoroutine(Death());
         }
+        else
+        {
+            canRun = true;
+        }
     }
     // getHeatlh
     public void takeHeatlh(int Heatlh)
@@ -133,7 +142,7 @@ public class PlayerScript : MonoBehaviour
         animator.SetBool("isDeath", true);
         yield return new WaitForSeconds(2);
         canvasEndGame.SetActive(true);
-        SaveScore();
+        //SaveScore();
         yield return new WaitForSeconds(1);
         Destroy(gameObject);
 
@@ -144,7 +153,7 @@ public class PlayerScript : MonoBehaviour
         //transform.position += moveInput * moveSpeed * Time.deltaTime;
         Score = (score + numberOfCoins);
         coinLever.text = numberOfCoins.ToString();
-        coinText.text =  numberOfCoins.ToString();
+        coinText.text = numberOfCoins.ToString();
         // Key
         KeyText.text = numberOfKey.ToString();
         // thanh máu
@@ -181,20 +190,35 @@ public class PlayerScript : MonoBehaviour
         {
             animator.SetBool("isRunning", false);
         }
-        if (Input.GetKeyDown(KeyCode.Space) ) // Khi nhấn phím Space (có thể thay đổi)
+        if (canPressSpace && Input.GetKeyDown(KeyCode.Space)) // Khi nhấn phím Space (có thể thay đổi)
         {
+            canPressSpace = false;
+            cooldownTimer = cooldownTime;
             StartCoroutine(AttackKnite());
         }
-
-
-        if (Input.GetKeyDown(KeyCode.E)) // Khi nhấn phím Space (có thể thay đổi)
+        if (!canPressSpace)
         {
-            StartCoroutine (AttackShield());
+            cooldownTimer -= Time.deltaTime;
+
+            if (cooldownTimer <= 0)
+            {
+                canPressSpace = true;
+            }
         }
 
+
+        if (canPressSpace && Input.GetKeyDown(KeyCode.E)) // Khi nhấn phím Space (có thể thay đổi)
+        {
+            canPressSpace = false;
+            cooldownTimer = cooldownTime;
+            StartCoroutine(AttackShield());
+        }
+    }
         IEnumerator AttackKnite()
         {
             knite.SetActive(true);
+            soundManager.PlayFSX(soundManager.Knite);
+
             animator.SetBool("Knite", true);
             yield return new WaitForSeconds(1);
             knite.SetActive(false);
@@ -204,45 +228,52 @@ public class PlayerScript : MonoBehaviour
         IEnumerator AttackShield()
         {
             shield.SetActive(true);
+            soundManager.PlayFSX(soundManager.Shield);
             animator.SetBool("Shield", true);
             yield return new WaitForSeconds(1); 
             shield.SetActive(false);
             animator.SetBool("Shield", false);
 
         }
-    }
+    
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            //Chạm coin
+            if (collision.gameObject.CompareTag("Coin"))
+            {
+                soundManager.PlayFSX(soundManager.getCoint);
+            }
             // Kiểm tra xem Player có va chạm với OB không
-            if (collision.gameObject.CompareTag("OB"))
+        if (collision.gameObject.CompareTag("OB"))
             {
                 // Lấy Rigidbody của OB
                 Rigidbody2D obRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
 
             }
-        if (collision.gameObject.CompareTag("checkpoint"))
-        {
-            canRun = false;
+            if (collision.gameObject.CompareTag("checkpoint"))
+            {
+                canRun = false;
 
-        }
+            }
         // chạm key
-        if (collision.gameObject.CompareTag("Key"))
-            {
+            if (collision.gameObject.CompareTag("Key"))
+                {
 
-                soundManager.PlayFSX(soundManager.getCoint);
-                numberOfKey++;
-                numberOfCoins += keyPoint;
-                // animator.SetBool("getKey", true);
-                Destroy(collision.gameObject);
+                    soundManager.PlayFSX(soundManager.getCoint);
+                    numberOfKey++;
+                    numberOfCoins += keyPoint;
+                    // animator.SetBool("getKey", true);
+                    Destroy(collision.gameObject);
+                }
+                // chạm Slime
+                if (collision.gameObject.CompareTag("Slime"))
+                {
+                    animator.SetBool("isHurt", true);
+                }
             }
-            // chạm Slime
-            if (collision.gameObject.CompareTag("Slime"))
-            {
-                animator.SetBool("isHurt", true);
-            }
-        }
-        // thoát khỏi collision
-        private void OnCollisionExit2D(Collision2D collision)
+
+// thoát khỏi collision
+private void OnCollisionExit2D(Collision2D collision)
         {
             
             if (collision.gameObject.CompareTag("Slime"))
@@ -253,11 +284,7 @@ public class PlayerScript : MonoBehaviour
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            //Chạm coin
-            if (collision.CompareTag("Coin"))
-            {
-                soundManager.PlayFSX(soundManager.hitwall);
-            }
+
             // Chạm điểm EndGame
             if (collision.CompareTag("Finishpoint") && numberOfKey>=3)
             {
@@ -347,13 +374,15 @@ public class PlayerScript : MonoBehaviour
         }
         IEnumerator Notify()
         {
-            NotifyText.text = "Successfuly!";
+        //NotifyText.text = "Successfuly!";
+        Noti = true;
         yield return new WaitForSeconds(2);
-            NotifyText.text = "Save Your Point!";
+        Noti = false;
+            //NotifyText.text = "Save Your Point!";
 
     }
     // Can run
-    public void CanRun()
+        public void CanRun()
         {
         canRun = true;
         }
@@ -397,7 +426,7 @@ public class PlayerScript : MonoBehaviour
                 {
                 checkP.SetActive(false);
                 StartCoroutine(Notify());
-                }
+            }
                 else
                 {
                     // gọi lại api lưu position
@@ -414,8 +443,9 @@ public class PlayerScript : MonoBehaviour
             var email = LoginScript.loginResponse.email;
             ScoreModel scoreModel = new ScoreModel(email, Score);
             StartCoroutine(saveScoreAPI(scoreModel));
-            //saveScoreAPI(scoreModel);
-        }
+            //saveScoreAPI(scoreModel);\
+            canRun = true;
+    }
 
         // api lưu score
         IEnumerator saveScoreAPI(ScoreModel scoreModel)

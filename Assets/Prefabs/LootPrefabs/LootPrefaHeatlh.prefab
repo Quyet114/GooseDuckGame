@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5540047334601671894}
   m_Layer: 0
   m_Name: LootPrefaHeatlh
-  m_TagString: Untagged
+  m_TagString: Heatlh
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

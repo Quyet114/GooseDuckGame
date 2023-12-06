@@ -9,7 +9,7 @@ public class SceneController : MonoBehaviour
     public int numKey;
     public static SceneController instance;
     [SerializeField] Animator animator;
-    public void Awake()
+/*    public void Awake()
     {
         if (instance == null)
         {
@@ -20,7 +20,7 @@ public class SceneController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
+    }*/
     void Update()
     {
          numKey = PlayerScript.numberOfKey;

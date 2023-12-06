@@ -14,6 +14,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip death;
     public AudioClip hitwall;
     public AudioClip Monster;
+    public AudioClip Shield;
+    public AudioClip Knite;
     // Start is called before the first frame update
     void Start()
     {

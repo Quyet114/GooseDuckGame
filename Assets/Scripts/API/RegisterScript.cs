@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 public class RegisterScript : MonoBehaviour
 {
-    public TMP_InputField edtUserName, edtPass, edtConfirmPass;
+    public TMP_InputField edtUserName, edtPass, edtConfirmPass, edtMail;
     public TMP_Text txtError, txtNoti;
    
     // Start is called before the first frame update
@@ -26,25 +26,27 @@ public class RegisterScript : MonoBehaviour
     public void kiemTraDangKy()
     {
         string userName = edtUserName.text;
+        string email = edtMail.text;
         string pass = edtPass.text;
         string confirmPass = edtConfirmPass.text;
+        txtError.SetText("Loading...! Please waitting!");
         if (pass.Equals(confirmPass))
         {
-            UserModel userModel = new UserModel(userName, pass);
+            UserModel userModel = new UserModel(userName, email, pass);
             CheckSignup(userModel);
             StartCoroutine(CheckSignup(userModel));
         }
         else
         {
-            txtNoti.SetText("Confirm Password wrong");
+            txtError.SetText("Confirm Password wrong");
             if (userName.Equals("") || pass.Equals(""))
             {
-                txtNoti.SetText("email and password is not empty");
+                txtError.SetText("email and password is not empty");
 
             }
             else
             {
-                txtNoti.SetText("");
+                txtError.SetText("");
             }
         }
     }
@@ -54,7 +56,8 @@ public class RegisterScript : MonoBehaviour
         //…
         string jsonStringRequest = JsonConvert.SerializeObject(userModel);
 
-        var request = new UnityWebRequest("https://hoccungminh.dinhnt.com/fpt/register", "POST");
+        //var request = new UnityWebRequest("https://hoccungminh.dinhnt.com/fpt/register", "POST");
+        var request = new UnityWebRequest("https://mongo-game-api.onrender.com/v1/auth/register", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -66,7 +69,7 @@ public class RegisterScript : MonoBehaviour
         {
             Debug.Log(request.error);
             Debug.Log("Error API");
-            txtNoti.SetText("Failed");
+            txtError.SetText("Failed");
         }
 
 
@@ -78,10 +81,11 @@ public class RegisterScript : MonoBehaviour
             string notification = responseModel.notification;
             if (notification != null)
             {
-                txtNoti.text = notification;
+                txtError.text = notification;
             }
 
         }
         request.Dispose();
     }
+
 }
