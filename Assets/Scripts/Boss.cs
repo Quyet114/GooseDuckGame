@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Boss : MonoBehaviour
 {
@@ -16,13 +17,20 @@ public class Boss : MonoBehaviour
     public float changeDirectionTime = 2.0f; // Thời gian giữa các hướng di chuyển
     private Vector2 moveDirection;
     private float changeDirectionTimer;
-    //di chuyển cho slime +++++++++++++++++++++++++++++++++++
+    //di chuyển cho slime +++++++++++++++++++++++++++++++++++a
     // Start is called before the first frame update
-    public float maxHealth = 5f;
+    int maxHealth = 5;
     private bool canRun = true;
+
+    //-----
+    int curentHeath;
+    public HeatlhBarBoss heathBar;
+    public UnityEvent onDeath;
     void Start()
     {
-        if(canRun )
+        curentHeath = maxHealth;
+        heathBar.UpdateBar(curentHeath, maxHealth);
+        if (canRun )
         {
             MoveDirection();
         }
@@ -45,12 +53,22 @@ public class Boss : MonoBehaviour
                 changeDirectionTimer = 0;
             }
         }
-        if(maxHealth == 0)
+        if(curentHeath == 0)
         {
-            Destroy(gameObject);
+            StartCoroutine(Death());
+        }
+        if (heathBar != null)
+        {
+            heathBar.UpdateHealth(curentHeath, maxHealth);
         }
     }
+    IEnumerator Death()
+    {
+        animator.SetBool("die", true);
+        yield return new WaitForSeconds(1);
+        Destroy(gameObject);
 
+    }
     private void MoveDirection()
     {
         // Tạo hướng di chuyển ngẫu nhiên trong khoảng đã cho
@@ -118,7 +136,7 @@ public class Boss : MonoBehaviour
     }
     IEnumerator StandStill()
     {
-        maxHealth--;
+        curentHeath--;
         canRun = false;
         yield return new WaitForSeconds(2);
         canRun = true;

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Heatlh
   m_EditorClassIdentifier: 
   lootSprite: {fileID: -651057808, guid: 080cb6d98b00c2645b2c41df5f69bc78, type: 3}
-  lootName: Boom
+  lootName: Heatlh
   dropChance: 100

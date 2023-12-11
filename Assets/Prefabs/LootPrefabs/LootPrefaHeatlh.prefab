@@ -12,12 +12,11 @@ GameObject:
   - component: {fileID: 2489599872297389854}
   - component: {fileID: 1896197430458960028}
   - component: {fileID: 9143461584426464544}
-  - component: {fileID: 8271020713233313897}
   - component: {fileID: 603378449413527518}
   - component: {fileID: 5540047334601671894}
   m_Layer: 0
   m_Name: LootPrefaHeatlh
-  m_TagString: Heatlh
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,26 +144,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.022060871, y: -0.24355897}
   serializedVersion: 2
   m_Radius: 0.678939
---- !u!114 &8271020713233313897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6365483227598254474}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044ab1fb73e059444b8e2744552ccd72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minDamage: 0
-  maxDamage: 0
 --- !u!95 &603378449413527518
 Animator:
   serializedVersion: 5

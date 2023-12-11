@@ -24,7 +24,7 @@ public class Heatlh : MonoBehaviour
         {
             player = collision.gameObject.GetComponentInParent<PlayerScript>();
             InvokeRepeating("HeatlhPlayer", 0, 1f);
-            Destroy(gameObject, 1f);
+            Destroy(gameObject);
         }
     }
     void HeatlhPlayer()
